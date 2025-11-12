@@ -1,21 +1,51 @@
-:root { --brand: #4f46e5; }
-* { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+:root {
+  --brand: #4f46e5;
+}
+* {
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+}
 
 .gradient-hero {
   background: radial-gradient(1200px 400px at 50% -10%, var(--brand), #111 60%);
 }
 
-.album-cover, .placeholder-cover {
+.album-cover,
+.placeholder-cover {
   background: #dfe3ea;
   border-radius: 1rem;
   width: 100%;
   padding-top: 66%;
 }
 
-.album-cover { max-width: 640px; }
-.pricing-card:hover { transform: translateY(-2px); transition: .2s ease; }
-footer { background: #f8f9fa; }
+.album-cover {
+  max-width: 640px;
+}
+.pricing-card:hover {
+  transform: translateY(-2px);
+  transition: 0.2s ease;
+}
+footer {
+  background: #f8f9fa;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
 
 @media (max-width: 576px) {
-  .album-cover { max-width: 100%; }
+  .album-cover {
+    max-width: 100%;
+  }
 }
