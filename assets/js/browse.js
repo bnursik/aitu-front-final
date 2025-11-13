@@ -53,43 +53,67 @@ $(async function () {
   function renderCards(items) {
     const grid = $("#playlistGrid").empty();
 
-    items.forEach((p) => {
-      // Detect shape (album from new-releases vs playlist from search)
-      const isAlbum = Array.isArray(p.artists);
-      const title = p.name || "Untitled";
-      const subtitle = isAlbum
-        ? (p.artists && p.artists[0] && p.artists[0].name) || "Various Artists"
-        : (p.owner && p.owner.display_name) || "Spotify";
-      const img = (p.images && p.images[0] && p.images[0].url) || "";
+    (items || []).forEach((raw) => {
+      const p = raw || null;
+      if (!p) return;
+
+      const kind =
+        p.type === "album" || p.album_type
+          ? "album"
+          : p.type === "playlist" || p.owner
+          ? "playlist"
+          : Array.isArray(p.artists)
+          ? "album"
+          : "playlist";
+
+      const title = p && p.name ? p.name : "Untitled";
+      const subtitle =
+        kind === "album"
+          ? (p.artists && p.artists[0] && p.artists[0].name) ||
+            "Various Artists"
+          : (p.owner && p.owner.display_name) || "Spotify";
+
+      const img =
+        (p.images && p.images[0] && p.images[0].url) ||
+        (p.images && p.images[1] && p.images[1].url) ||
+        "";
+
       const url =
         (p.external_urls && p.external_urls.spotify) ||
         "https://open.spotify.com";
-      const type = isAlbum ? "album" : "playlist";
+
+      const id = p.id || Math.random().toString(36).slice(2);
 
       const card = $(`
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="card media-card" data-id="${p.id}" data-type="${type}">
-            ${
-              img
-                ? `<img class="card-img-top" src="${img}" alt="">`
-                : `<div class="placeholder-cover card-img-top"></div>`
-            }
-            <div class="card-body">
-              <h5 class="card-title">${escapeHtml(title)}</h5>
-              <p class="card-text small text-secondary">${escapeHtml(
-                subtitle
-              )}</p>
-              <div class="d-flex gap-2">
-                <a href="${url}" target="_blank" class="btn btn-primary btn-sm">Open</a>
-                <button class="btn btn-outline-secondary btn-sm fav-btn">♥ Favorite</button>
-              </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="card media-card" data-id="${id}" data-type="${kind}">
+          ${
+            img
+              ? `<img class="card-img-top" src="${img}" alt="">`
+              : `<div class="placeholder-cover card-img-top"></div>`
+          }
+          <div class="card-body">
+            <h5 class="card-title">${escapeHtml(title)}</h5>
+            <p class="card-text small text-secondary">${escapeHtml(
+              subtitle
+            )}</p>
+            <div class="d-flex gap-2">
+              <a href="${url}" target="_blank" class="btn btn-primary btn-sm">Open</a>
+              <button class="btn btn-outline-secondary btn-sm fav-btn">♥ Favorite</button>
             </div>
           </div>
         </div>
-      `);
+      </div>
+    `);
 
-      grid.append(card.hide().fadeIn(150));
+      grid.append(card.hide().fadeIn(120));
     });
+
+    if (!grid.children().length) {
+      grid.append(
+        `<div class="col-12"><div class="alert alert-secondary">No results.</div></div>`
+      );
+    }
   }
 
   // Save to favorites
