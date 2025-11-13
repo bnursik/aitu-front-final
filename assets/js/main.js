@@ -1,11 +1,19 @@
-const API_BASE = "https://aitu-front-final-production.up.railway.app";
+(function () {
+  var PROD_API = "https://aitu-front-final-production.up.railway.app";
 
-// Footer year
+  var IS_PAGES = location.hostname.endsWith("github.io");
+  var base = IS_PAGES ? PROD_API : "http://localhost:8080";
+
+  window.API_BASE = base;
+  var API_BASE = base;
+})();
+
+// ---------- Footer year ----------
 $(function () {
   $("#year").text(new Date().getFullYear());
 });
 
-// Local Storage helpers
+// ---------- Local Storage helpers ----------
 function getFavorites() {
   try {
     return JSON.parse(localStorage.getItem("wp_favs") || "[]");
