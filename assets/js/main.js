@@ -1,5 +1,4 @@
-// Frontend globals
-const API_BASE = "http://bnursik.github.io";
+const API_BASE = "https://aitu-front-final-production.up.railway.app";
 
 // Footer year
 $(function () {
